@@ -1,0 +1,11 @@
+{
+    "name": "ava7/currency_converter",
+    "description": "A simple currency converter",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
