@@ -11,5 +11,6 @@
 ```bash
 git clone git@github.com:Ava7/converter.git
 cd converter
+composer install
 php ./tests/index.php 100 EUR USD
 ```
