@@ -6,8 +6,6 @@ use \Exception;
 
 class CurrencyConverter
 {
-    use Validator;
-
     private $currency;
 
     public function __construct(CurrencySeederInterface $currency)
@@ -15,15 +13,27 @@ class CurrencyConverter
         $this->currency = $currency;
     }
 
-    public function convert($amount, $from, $to)
+    public function convert($amount, $input, $output)
     {
         try {
-            Validator::checkCurrencyAvailability($this->currency, $from);
-            Validator::checkAvailableRates($this->currency->data->{$from}->rates, $to);
+            $data = $this->currency->getData();
+            $rates = new Currency($data);
+            $rate = $rates->get($input, $output);
+
+            $amount = $this->validateAmount($amount);
         } catch (Exception $e) {
             die($e->getMessage());
         }
 
-        return $amount * $this->currency->data->{$from}->rates->{$to};
+        return $amount * $rate;
+    }
+
+    private function validateAmount($amount)
+    {
+        $amount = (int) $amount;
+        if ($amount > 0) {
+            return $amount;
+        }
+        throw new Exception('Invalid amount, please use positive numbers only.');
     }
 }

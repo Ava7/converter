@@ -4,16 +4,28 @@ namespace App;
 
 class FileSeeder implements CurrencySeederInterface
 {
-    public $data;
+    protected $filename;
 
     public function __construct($filename)
     {
-        $this->data = $this->parse($this->load($filename));
+        $this->filename = $filename;
     }
 
-    private function parse($data)
+    public function getData()
     {
-        return json_decode($data);
+        return $this->format();
+    }
+
+    public function format()
+    {
+        $json = json_decode($this->load($this->filename));
+
+        $data = array();
+        foreach ($json as $key => $value) {
+            $data[$key] = (array) $value->rates;
+        }
+
+        return $data;
     }
 
     private function load($filename)
